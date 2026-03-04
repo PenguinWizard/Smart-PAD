@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
 
 
 parser.on('data', (data) => {
+    if (infolist.length > 5) {
+        infolist.length = 0;
+    }
     console.log('Arduino:', data);
     infolist.push(data)
     let largestVal = 0
