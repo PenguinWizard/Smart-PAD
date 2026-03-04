@@ -20,9 +20,26 @@ app.get('/', (req, res) => {
 
 
 parser.on('data', (data) => {
-    console.log('Arduino says:', data);
+    console.log('Arduino:', data);
     infolist.push(data)
-    io.emit('serialData', infolist); 
+    let largestVal = 0
+    infolist.forEach((element)=>{
+        if (element > largestVal) {
+            largestVal = element
+        }
+    })
+    if (largestVal >= 0 && largestVal < 200) {
+        io.emit('serialData', 'p')
+    } else if (largestVal >= 200 && largestVal < 315) {
+        io.emit('serialData', 'mp')
+    } else if (largestVal >= 315 && largestVal < 415) {
+        io.emit('serialData', 'mf')
+    } else if (largestVal >= 415 && largestVal < 800) {
+        io.emit('serialData', 'f')
+    } else if (largestVal >= 800) {
+        io.emit('serialData', "ff")
+    }
+    //io.emit('serialData', infolist);
 });
 
 server.listen(3000, () => {
